@@ -12,12 +12,12 @@ router.get('/', (req, res) => {
       attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
     }
   })
-    .then(CatData => {
-      if(!CatData) {
+    .then(catData => {
+      if(!catData) {
         res.status(404).json({message: 'No category found'});
         return;
       }
-      res.json(CatData);
+      res.json(catData);
     })
     .catch(err => {
       console.log(err);
@@ -37,12 +37,12 @@ router.get('/:id', (req, res) => {
       attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
     }
   })
-    .then(CatData => {
-      if(!CatData) {
+    .then(catData => {
+      if(!catData) {
         res.status(404).json({message: 'No category found'});
         return;
       }
-      res.json(CatData);
+      res.json(catData);
     })
     .catch(err => {
       console.log(err);
@@ -52,10 +52,34 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new category
+  Category.create({
+    category_name: req.body.category_name
+  })
+    .then(catData => res.json(catData))
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  Category.update(req.body, {
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(catData => {
+      if (!catData) {
+        res.status(404).json({message:'No category found with this id'});
+        return;
+      }
+      res.json(catData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 router.delete('/:id', (req, res) => {
