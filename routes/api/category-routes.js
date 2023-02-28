@@ -71,7 +71,7 @@ router.put('/:id', (req, res) => {
   })
     .then(catData => {
       if (!catData) {
-        res.status(404).json({message:'No category found with this id'});
+        res.status(404).json({message:'No category found'});
         return;
       }
       res.json(catData);
@@ -84,6 +84,22 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
+  Category.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(catData => {
+      if (!catData){
+        res.status(404).json({message: 'No category found'});
+        return;
+      }
+      res.json(catData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
